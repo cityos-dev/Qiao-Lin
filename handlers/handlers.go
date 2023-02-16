@@ -61,7 +61,10 @@ func UploadFile(c *fiber.Ctx) error {
 	//check if media type if supported
 	if contentType != "video/mpeg" && contentType != "video/mp4" {
 		fmt.Println("Uploaded file media type is not supported!!")
-		return c.Status(415).JSON("Unsupported Media Type")
+		return c.Status(415).JSON(fiber.Map{
+			"code":        415,
+			"description": "Unsupported Media Type",
+		})
 	}
 	//check if file exists
 	fmt.Println("check if uploaded file exists in database")
