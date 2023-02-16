@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"net"
 	"os"
 	"time"
 
@@ -13,6 +14,18 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
+
+func HealthCheck(c *fiber.Ctx) error {
+	timeout := 1 * time.Second
+	_, err := net.DialTimeout("http", "localhost:8080/v1", timeout)
+	if err != nil {
+		fmt.Println("Server unreachable, error: ", err)
+	}
+	return c.Status(200).JSON(fiber.Map{
+		"code":        200,
+		"description": "server is healthy",
+	})
+}
 
 func UploadFile(c *fiber.Ctx) error {
 	queryValue := c.Query("files")

@@ -14,4 +14,6 @@ func setupRoutes(app *fiber.App) {
 	app.Delete("/v1/:fileid", handlers.DeleteOneFile)
 
 	app.Get("/v1/files/:fileid", handlers.GetOneFile)
+
+	app.Get("/v1/health", handlers.HealthCheck)
 }
