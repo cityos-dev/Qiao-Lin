@@ -7,11 +7,11 @@ import (
 
 func setupRoutes(app *fiber.App) {
 
-	app.Post("/files", handlers.UploadFile)
+	app.Post("/v1/files", handlers.UploadFile)
 
-	app.Get("/files", handlers.ListUploadedFiles)
+	app.Get("/v1/files", handlers.ListUploadedFiles)
 
-	app.Delete("/:fileid", handlers.DeleteOneFile)
+	app.Delete("/v1/:fileid", handlers.DeleteOneFile)
 
-	app.Get("/files/:fileid", handlers.GetOneFile)
+	app.Get("/v1/files/:fileid", handlers.GetOneFile)
 }
