@@ -21,7 +21,7 @@ func HealthCheck(c *fiber.Ctx) error {
 	if err != nil {
 		fmt.Println("Server unreachable, error: ", err)
 	}
-	return c.Status(200).JSON(fiber.Map{
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"code":        200,
 		"description": "server is healthy",
 	})
@@ -33,16 +33,16 @@ func UploadFile(c *fiber.Ctx) error {
 	file, err := c.FormFile("files")
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
+			"code":        400,
+			"description": err.Error(),
 		})
 	}
 
 	buffer, err := file.Open()
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
+			"code":        400,
+			"description": err.Error(),
 		})
 	}
 	defer buffer.Close()
@@ -61,10 +61,7 @@ func UploadFile(c *fiber.Ctx) error {
 	//check if media type if supported
 	if contentType != "video/mpeg" && contentType != "video/mp4" {
 		fmt.Println("Uploaded file media type is not supported!!")
-		return c.Status(415).JSON(fiber.Map{
-			"code":        415,
-			"description": "Unsupported Media Type",
-		})
+		return c.SendStatus(415)
 	}
 	//check if file exists
 	fmt.Println("check if uploaded file exists in database")
@@ -73,7 +70,7 @@ func UploadFile(c *fiber.Ctx) error {
 
 	if fileExist.Name != "" {
 		fmt.Println("File exists" + fileExist.Name)
-		return c.Status(409).JSON("File exists")
+		return c.SendStatus(409)
 	}
 	fmt.Println("File name does not exist in database")
 
@@ -95,7 +92,10 @@ func UploadFile(c *fiber.Ctx) error {
 	}
 
 	database.DB.Db.Create(&newFile)
-	return c.Status(201).JSON("File uploaded")
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"code":        201,
+		"description": "File uploaded",
+	})
 }
 
 func ListUploadedFiles(c *fiber.Ctx) error {
@@ -111,7 +111,7 @@ func ListUploadedFiles(c *fiber.Ctx) error {
 	if err.Error != nil {
 		return c.SendStatus(fiber.StatusNoContent)
 	}
-	return c.Status(200).JSON(apiFiles)
+	return c.Status(fiber.StatusOK).JSON(apiFiles)
 }
 
 func DeleteOneFile(c *fiber.Ctx) error {
@@ -121,7 +121,10 @@ func DeleteOneFile(c *fiber.Ctx) error {
 	database.DB.Db.Where("file_id = ?", id).Find(&fileExist)
 	fmt.Println(fileExist.Name)
 	if fileExist.Name == "" {
-		return c.Status(404).JSON("File not found")
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"code":        404,
+			"description": "File not found",
+		})
 	}
 	fmt.Println("Now deleting")
 	database.DB.Db.Where("file_id = ?", id).Delete(&file)
@@ -130,9 +133,15 @@ func DeleteOneFile(c *fiber.Ctx) error {
 
 	if err != nil {
 		fmt.Println(err)
-		return c.Status(500).JSON("Server error")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"code":        500,
+			"description": "server error",
+		})
 	}
-	return c.Status(204).JSON("File was successfully removed")
+	return c.Status(fiber.StatusNoContent).JSON(fiber.Map{
+		"code":        204,
+		"description": "File removed",
+	})
 }
 
 func GetOneFile(c *fiber.Ctx) error {
@@ -147,7 +156,7 @@ func GetOneFile(c *fiber.Ctx) error {
 
 	fileLocation := "./uploads/" + fileExist.Name
 
-	return c.Status(200).Download(fileLocation)
+	return c.Status(fiber.StatusOK).Download(fileLocation)
 }
 
 func createDirectoryIfNotExist() {
