@@ -3,7 +3,6 @@ package database
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/cityos-dev/Qiao-Lin/models"
 	"gorm.io/driver/postgres"
@@ -19,10 +18,7 @@ var DB DbInstance
 
 func ConnectToPostgresDb() {
 	dbconn := fmt.Sprintf(
-		"host=db user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Shanghai",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
+		"host=db user=qilin password=qilin dbname=qilin port=5432 sslmode=disable TimeZone=Asia/Shanghai",
 	)
 
 	db, err := gorm.Open(postgres.Open(dbconn), &gorm.Config{
