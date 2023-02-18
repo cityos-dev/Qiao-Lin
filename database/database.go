@@ -31,7 +31,7 @@ func ConnectToPostgresDb() {
 
 	if err != nil {
 		log.Fatal("Failed to connect to postgres-db. \n", err)
-		os.Exit(2)
+		// os.Exit(2)
 	}
 
 	log.Println("postgres-db connected")

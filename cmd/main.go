@@ -3,11 +3,14 @@ package main
 import (
 	"time"
 
+	"fmt"
+
 	"github.com/cityos-dev/Qiao-Lin/database"
 	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
+	fmt.Println("testing server ")
 	database.ConnectToPostgresDb()
 
 	app := fiber.New(fiber.Config{
@@ -17,6 +20,6 @@ func main() {
 		WriteTimeout: 5 * time.Second,
 	})
 	setupRoutes(app)
-
+	fmt.Println("server started ")
 	app.Listen("0.0.0.0:8080")
 }
