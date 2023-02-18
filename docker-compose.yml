@@ -13,10 +13,9 @@ services:
       - 5432 
     ports:
       - "5432:5432"
-    volumes:
-      - postgres-db:/var/lib/postgresql/data
-    networks:
-      - default
+    # volumes:
+    #   - postgres-db:/var/lib/postgresql/data
+    restart: always
   web:
     build: .
     env_file:
@@ -33,5 +32,5 @@ services:
     depends_on:
       - postgres
 
-volumes:
-  postgres-db:
+# volumes:
+#   postgres-db:

@@ -21,12 +21,17 @@ func ConnectToPostgresDb() {
 	fmt.Println(os.Getenv("DB_USER"))
 	fmt.Println(os.Getenv("DB_PASSWORD"))
 	fmt.Println(os.Getenv("DB_NAME"))
-	dsn := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		"postgres",
-		"5432",
-		os.Getenv("DB_NAME"))
+
+	dsn := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		"postgres", 5432, os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
+
+	// dsn := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
+	// 	os.Getenv("DB_USER"),
+	// 	os.Getenv("DB_PASSWORD"),
+	// 	"postgres",
+	// 	"5432",
+	// 	os.Getenv("DB_NAME"))
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
@@ -34,7 +39,7 @@ func ConnectToPostgresDb() {
 
 	if err != nil {
 		log.Fatal("Failed to connect to postgres db. \n", err)
-		os.Exit(2)
+		panic(err)
 	}
 
 	log.Println("postgres db connected")
