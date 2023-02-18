@@ -33,11 +33,11 @@ func ConnectToPostgresDb() {
 	})
 
 	if err != nil {
-		log.Fatal("Failed to connect to postgres-db. \n", err)
+		log.Fatal("Failed to connect to postgres db. \n", err)
 		os.Exit(2)
 	}
 
-	log.Println("postgres-db connected")
+	log.Println("postgres db connected")
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("running migrations")
