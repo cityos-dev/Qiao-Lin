@@ -32,15 +32,11 @@ func UploadFile(c *fiber.Ctx) error {
 	queryValue := c.Query("files")
 	fmt.Println(queryValue)
 	file, _ := c.FormFile("files")
-	testFile, _ := c.Context().Request.MultipartForm()
-
 	// var testFile models.File
 	// if err := c.BodyParser(&testFile); err != nil {
 	// 	fmt.Println("error = ", err)
 	// 	return c.SendStatus(fiber.StatusInternalServerError)
 	// }
-	fmt.Printf("Get testFile info %+v", testFile)
-	fmt.Println(testFile.Value)
 
 	fileName := file.Filename
 	contentType := file.Header["Content-Type"][0]
