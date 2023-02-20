@@ -28,23 +28,23 @@ func HealthCheck(c *fiber.Ctx) error {
 }
 
 func UploadFile(c *fiber.Ctx) error {
+	c.Accepts("video/mp4")
 	queryValue := c.Query("files")
 	fmt.Println(queryValue)
-	file, err := c.FormFile("files")
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"code":        400,
-			"description": err.Error(),
-		})
-	}
+	file, _ := c.FormFile("files")
+	testFile, _ := c.Context().Request.MultipartForm()
+
+	// var testFile models.File
+	// if err := c.BodyParser(&testFile); err != nil {
+	// 	fmt.Println("error = ", err)
+	// 	return c.SendStatus(fiber.StatusInternalServerError)
+	// }
+	fmt.Printf("Get testFile info %+v", testFile)
+	fmt.Println(testFile.Value)
 
 	fileName := file.Filename
 	contentType := file.Header["Content-Type"][0]
 	fileSize := file.Size
-
-	fmt.Println(fileName)
-	fmt.Println(contentType)
-	fmt.Println(fileSize)
 
 	//check if media type if supported
 	if contentType != "video/mpeg" && contentType != "video/mp4" {
@@ -82,8 +82,6 @@ func UploadFile(c *fiber.Ctx) error {
 		FileId: uuid.New(),
 		Name:   fileName,
 		Size:   fileSize,
-		// Created_at: time.Now(),
-		// Content: fileValue,
 	}
 
 	database.DB.Db.Create(&newFile)
