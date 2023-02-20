@@ -61,7 +61,10 @@ func UploadFile(c *fiber.Ctx) error {
 	//check if media type if supported
 	if contentType != "video/mpeg" && contentType != "video/mp4" {
 		fmt.Println("Uploaded file media type is not supported!!")
-		return c.SendStatus(415)
+		return c.Status(415).JSON(fiber.Map{
+			"code":        415,
+			"description": err.Error(),
+		})
 	}
 	//check if file exists
 	fmt.Println("check if uploaded file exists in database")
@@ -70,7 +73,10 @@ func UploadFile(c *fiber.Ctx) error {
 
 	if fileExist.Name != "" {
 		fmt.Println("File exists" + fileExist.Name)
-		return c.SendStatus(409)
+		return c.Status(409).JSON(fiber.Map{
+			"code":        409,
+			"description": err.Error(),
+		})
 	}
 	fmt.Println("File name does not exist in database")
 
