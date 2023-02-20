@@ -38,23 +38,11 @@ func UploadFile(c *fiber.Ctx) error {
 		})
 	}
 
-	buffer, err := file.Open()
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"code":        400,
-			"description": err.Error(),
-		})
-	}
-	defer buffer.Close()
-
 	fileName := file.Filename
-	fileBuffer := buffer
 	contentType := file.Header["Content-Type"][0]
 	fileSize := file.Size
-	// fileValue := c.Body()
 
 	fmt.Println(fileName)
-	fmt.Println(fileBuffer)
 	fmt.Println(contentType)
 	fmt.Println(fileSize)
 
@@ -156,7 +144,10 @@ func GetOneFile(c *fiber.Ctx) error {
 	var fileExist models.File
 	database.DB.Db.Where("file_id = ?", id).Find(&fileExist)
 	if fileExist.Name == "" {
-		return c.Status(404).JSON("File not found")
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"code":        404,
+			"description": "File not found",
+		})
 	}
 	fmt.Println(fileExist.Name)
 
