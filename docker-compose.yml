@@ -6,9 +6,9 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE_NAME}
     expose:
       - 5432 
     ports:
@@ -16,10 +16,16 @@ services:
     # volumes:
     #   - postgres-db:/var/lib/postgresql/data
     restart: always
+    networks:
+      - fullstack
   web:
     build: .
     env_file:
       - .env
+    environment:
+      - DB_USERNAME:${DB_USERNAME}
+      - DB_PASSWORD:${DB_PASSWORD}
+      - DB_DATABASE_NAME:${DB_DATABASE_NAME} 
     expose:
       - 8080
     ports:
@@ -28,9 +34,12 @@ services:
       - .:/usr/src/app
     command: go run cmd/main.go cmd/routes.go -b 0.0.0.0
     networks:
-      - default
+      - fullstack
     depends_on:
       - postgres
 
+networks:
+  fullstack:
+    driver: bridge
 # volumes:
 #   postgres-db:
