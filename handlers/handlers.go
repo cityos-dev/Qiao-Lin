@@ -31,12 +31,18 @@ func UploadFile(c *fiber.Ctx) error {
 	c.Accepts("video/mp4")
 	queryValue := c.Query("files")
 	fmt.Println(queryValue)
-	file, _ := c.FormFile("files")
+	file, err := c.FormFile("files")
 	// var testFile models.File
 	// if err := c.BodyParser(&testFile); err != nil {
 	// 	fmt.Println("error = ", err)
 	// 	return c.SendStatus(fiber.StatusInternalServerError)
 	// }
+	if err != nil {
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+			"code":        400,
+			"description": "bad request",
+		})
+	}
 
 	fileName := file.Filename
 	contentType := file.Header["Content-Type"][0]
