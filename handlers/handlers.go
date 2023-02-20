@@ -51,7 +51,7 @@ func UploadFile(c *fiber.Ctx) error {
 	fileBuffer := buffer
 	contentType := file.Header["Content-Type"][0]
 	fileSize := file.Size
-	fileValue := c.Body()
+	// fileValue := c.Body()
 
 	fmt.Println(fileName)
 	fmt.Println(fileBuffer)
@@ -84,11 +84,11 @@ func UploadFile(c *fiber.Ctx) error {
 	//save the file in a docker based postgres db
 
 	newFile := &models.File{
-		FileId:     uuid.New(),
-		Name:       fileName,
-		Size:       fileSize,
-		Created_at: time.Now(),
-		Content:    fileValue,
+		FileId: uuid.New(),
+		Name:   fileName,
+		Size:   fileSize,
+		// Created_at: time.Now(),
+		// Content: fileValue,
 	}
 
 	database.DB.Db.Create(&newFile)
@@ -99,14 +99,14 @@ func UploadFile(c *fiber.Ctx) error {
 }
 
 func ListUploadedFiles(c *fiber.Ctx) error {
-	type APIFiles struct {
-		FileId     string
-		Name       string
-		Size       int64
-		Created_at time.Time
-	}
+	// type APIFiles struct {
+	// 	FileId     string
+	// 	Name       string
+	// 	Size       int64
+	// 	Created_at time.Time
+	// }
 
-	var apiFiles []APIFiles
+	var apiFiles []models.File
 	err := database.DB.Db.Model(&models.File{}).Find(&apiFiles)
 	if err.Error != nil {
 		return c.SendStatus(fiber.StatusNoContent)

@@ -6,9 +6,8 @@ import (
 	"os"
 
 	"github.com/cityos-dev/Qiao-Lin/models"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 type DbInstance struct {
@@ -18,13 +17,13 @@ type DbInstance struct {
 var DB DbInstance
 
 func ConnectToPostgresDb() {
-	fmt.Println(os.Getenv("DB_USER"))
+	fmt.Println(os.Getenv("DB_USERNAME"))
 	fmt.Println(os.Getenv("DB_PASSWORD"))
-	fmt.Println(os.Getenv("DB_NAME"))
+	fmt.Println(os.Getenv("DB_DATABASE_NAME"))
 
 	dsn := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		"postgres", 5432, os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
+		"postgres", 5432, os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_DATABASE_NAME"))
 
 	// dsn := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
 	// 	os.Getenv("DB_USER"),
@@ -33,17 +32,19 @@ func ConnectToPostgresDb() {
 	// 	"5432",
 	// 	os.Getenv("DB_NAME"))
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
-	})
+	db, err := gorm.Open("postgres", dsn)
 
 	if err != nil {
 		log.Fatal("Failed to connect to postgres db. \n", err)
 		panic(err)
 	}
 
+	if err := db.DB().Ping(); err != nil {
+		log.Fatal("Failed to connect to postgres db. \n", err)
+		panic(err)
+	}
+
 	log.Println("postgres db connected")
-	db.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("running migrations")
 
