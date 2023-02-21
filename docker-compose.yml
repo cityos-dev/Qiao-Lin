@@ -13,8 +13,6 @@ services:
       - 5432 
     ports:
       - "5432:5432"
-    # volumes:
-    #   - postgres-db:/var/lib/postgresql/data
     restart: always
     networks:
       - fullstack
@@ -41,5 +39,3 @@ services:
 networks:
   fullstack:
     driver: bridge
-# volumes:
-#   postgres-db:

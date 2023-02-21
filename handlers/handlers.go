@@ -32,11 +32,7 @@ func UploadFile(c *fiber.Ctx) error {
 	queryValue := c.Query("files")
 	fmt.Println(queryValue)
 	file, err := c.FormFile("files")
-	// var testFile models.File
-	// if err := c.BodyParser(&testFile); err != nil {
-	// 	fmt.Println("error = ", err)
-	// 	return c.SendStatus(fiber.StatusInternalServerError)
-	// }
+
 	if err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
 			"code":        400,
@@ -96,13 +92,6 @@ func UploadFile(c *fiber.Ctx) error {
 }
 
 func ListUploadedFiles(c *fiber.Ctx) error {
-	// type APIFiles struct {
-	// 	FileId     string
-	// 	Name       string
-	// 	Size       int64
-	// 	Created_at time.Time
-	// }
-
 	var apiFiles []models.File
 	err := database.DB.Db.Model(&models.File{}).Find(&apiFiles)
 	if err.Error != nil {
