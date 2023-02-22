@@ -15,7 +15,7 @@ func main() {
 	database.ConnectToPostgresDb()
 
 	app := fiber.New(fiber.Config{
-		BodyLimit:    10 * 1024 * 1024, // this is the default limit of 10MB
+		BodyLimit:    20 * 1024 * 1024, // this is the default limit of 10MB
 		IdleTimeout:  20 * time.Second,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 5 * time.Second,
