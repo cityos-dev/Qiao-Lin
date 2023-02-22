@@ -1,3 +1,7 @@
+# Additional Feature I would like to address if there is more time - Qiao Lin
+If given more time I would spend time structuring my repo better, I would create libraries for separating concerns. The storage layer, service layer should ideally be entirely decoupled. I would refactor code better to create more helper and utils function for better reusability. 
+Also, I would implement a cloud storage service such as Amazon S3 for project environment variable and other necessary information storage, so that our video storage service can talk to it and retrieve information in a more secure way. Storing env variable in a cloud storage instead of locally is generally a better practice from my perspective. Under limited time I couldn't address those but I would spend more time on above features if I have more time.
+
 # Challenge Statement
 
 This challenge is about creating a simple video storage server with REST APIs
