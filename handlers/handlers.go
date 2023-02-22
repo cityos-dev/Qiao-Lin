@@ -100,10 +100,10 @@ func ListUploadedFiles(c *fiber.Ctx) error {
 }
 
 func DeleteOneFile(c *fiber.Ctx) error {
-	id := c.Params("fileId")
+	name := c.Params("fileId")
 	var fileExist models.File
 	var file models.File
-	database.DB.Db.Where("file_id = ?", id).Find(&fileExist)
+	database.DB.Db.Where("name = ?", name).Find(&fileExist)
 	fmt.Println(fileExist.Name)
 	if fileExist.Name == "" {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -112,7 +112,7 @@ func DeleteOneFile(c *fiber.Ctx) error {
 		})
 	}
 	fmt.Println("Now deleting")
-	database.DB.Db.Where("file_id = ?", id).Delete(&file)
+	database.DB.Db.Where("name = ?", name).Delete(&file)
 	path := "./uploads/" + fileExist.Name
 	err := os.Remove(path)
 
@@ -131,9 +131,9 @@ func DeleteOneFile(c *fiber.Ctx) error {
 
 func GetOneFile(c *fiber.Ctx) error {
 	//check requested file exist or not
-	id := c.Params("fileId")
+	name := c.Params("fileId")
 	var fileExist models.File
-	database.DB.Db.Where("file_id = ?", id).Find(&fileExist)
+	database.DB.Db.Where("name = ?", name).Find(&fileExist)
 	if fileExist.Name == "" {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"code":        404,
@@ -143,7 +143,7 @@ func GetOneFile(c *fiber.Ctx) error {
 	fmt.Println(fileExist.Name)
 
 	fileLocation := "./uploads/" + fileExist.Name
-	c.Response().Header.Set("Content-Disposition", id)
+	c.Response().Header.Set("Content-Disposition", name)
 	c.Response().Header.Set("Content-Type", "video/mp4")
 	return c.Status(fiber.StatusOK).Response().SendFile(fileLocation)
 }
