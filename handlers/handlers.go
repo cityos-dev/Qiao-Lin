@@ -28,10 +28,9 @@ func HealthCheck(c *fiber.Ctx) error {
 }
 
 func UploadFile(c *fiber.Ctx) error {
-	c.Accepts("video/mp4")
 	queryValue := c.Query("files")
 	fmt.Println(queryValue)
-	file, err := c.FormFile("files")
+	file, err := c.FormFile("data")
 
 	if err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
