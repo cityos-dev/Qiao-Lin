@@ -144,7 +144,7 @@ func GetOneFile(c *fiber.Ctx) error {
 
 	fileLocation := "./uploads/" + fileExist.Name
 	c.Response().Header.Set("Content-Disposition", name)
-	c.Response().Header.Set("Content-Type", "video/mp4")
+	c.Response().Header.Set("Content-Type", "video/mpeg")
 	return c.Status(fiber.StatusOK).Response().SendFile(fileLocation)
 }
 
