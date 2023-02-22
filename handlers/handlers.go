@@ -143,8 +143,9 @@ func GetOneFile(c *fiber.Ctx) error {
 	fmt.Println(fileExist.Name)
 
 	fileLocation := "./uploads/" + id
-
-	return c.Status(fiber.StatusOK).Download(fileLocation)
+	c.Response().Header.Set("Content-Disposition", id)
+	c.Response().Header.Set("Content-Type", "video/mp4")
+	return c.Status(fiber.StatusOK).Response().SendFile(fileLocation)
 }
 
 func createDirectoryIfNotExist() {
