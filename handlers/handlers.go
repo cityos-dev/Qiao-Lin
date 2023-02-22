@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"mime"
 	"net"
 	"os"
 	"time"
@@ -145,7 +146,7 @@ func GetOneFile(c *fiber.Ctx) error {
 
 	fileLocation := "./uploads/" + fileExist.Name
 	c.Response().Header.Set("Content-Disposition", fmt.Sprintf("form-data; name='data'; filename=%s", name))
-	c.Response().Header.Set("Content-Type", "video/mp4")
+	c.Response().Header.Set("Content-Type", mime.TypeByExtension(fileLocation))
 	return c.Status(fiber.StatusOK).SendFile(fileLocation)
 }
 
