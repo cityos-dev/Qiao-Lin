@@ -100,7 +100,7 @@ func ListUploadedFiles(c *fiber.Ctx) error {
 }
 
 func DeleteOneFile(c *fiber.Ctx) error {
-	id := c.Params("fileid")
+	id := c.Params("fileId")
 	var fileExist models.File
 	var file models.File
 	database.DB.Db.Where("file_id = ?", id).Find(&fileExist)
@@ -131,7 +131,7 @@ func DeleteOneFile(c *fiber.Ctx) error {
 
 func GetOneFile(c *fiber.Ctx) error {
 	//check requested file exist or not
-	id := c.Params("fileid")
+	id := c.Params("fileId")
 	var fileExist models.File
 	database.DB.Db.Where("file_id = ?", id).Find(&fileExist)
 	if fileExist.Name == "" {
@@ -142,7 +142,7 @@ func GetOneFile(c *fiber.Ctx) error {
 	}
 	fmt.Println(fileExist.Name)
 
-	fileLocation := "./uploads/" + fileExist.Name
+	fileLocation := "./uploads/" + id
 
 	return c.Status(fiber.StatusOK).Download(fileLocation)
 }
