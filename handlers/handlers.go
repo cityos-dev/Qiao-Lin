@@ -76,9 +76,10 @@ func UploadFile(c *fiber.Ctx) error {
 	//save the file in a docker based postgres db
 
 	newFile := &models.File{
-		FileId: uuid.New(),
-		Name:   fileName,
-		Size:   fileSize,
+		FileId:     uuid.New(),
+		Name:       fileName,
+		Size:       fileSize,
+		Created_At: time.Now(),
 	}
 
 	database.DB.Db.Create(&newFile)
@@ -143,9 +144,9 @@ func GetOneFile(c *fiber.Ctx) error {
 	fmt.Println(fileExist.Name)
 
 	fileLocation := "./uploads/" + fileExist.Name
-	c.Response().Header.Set("Content-Disposition", name)
-	c.Response().Header.Set("Content-Type", "video/mpeg")
-	return c.Status(fiber.StatusOK).Response().SendFile(fileLocation)
+	c.Response().Header.Set("Content-Disposition", fmt.Sprintf("form-data; name='data'; filename=%s", name))
+	c.Response().Header.Set("Content-Type", "video/mp4")
+	return c.Status(fiber.StatusOK).SendFile(fileLocation)
 }
 
 func createDirectoryIfNotExist() {
