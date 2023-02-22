@@ -71,7 +71,7 @@ func UploadFile(c *fiber.Ctx) error {
 	createDirectoryIfNotExist()
 
 	fmt.Println("Saving uploaded file")
-	c.SaveFile(file, fmt.Sprintf("./uploads/%s", fileName))
+	c.SaveFile(file, fmt.Sprintf("./uploads/%s", fileExist.FileId))
 
 	//save the file in a docker based postgres db
 
@@ -82,7 +82,7 @@ func UploadFile(c *fiber.Ctx) error {
 	}
 
 	database.DB.Db.Create(&newFile)
-	fileLocation := "./uploads/" + fileExist.Name
+	fileLocation := "./uploads/" + (fileExist.FileId).String()
 	c.Response().Header.Set("Location", fileLocation)
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"code":        201,
