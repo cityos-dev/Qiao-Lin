@@ -13,7 +13,6 @@ import (
 	"github.com/cityos-dev/Qiao-Lin/database"
 	"github.com/cityos-dev/Qiao-Lin/models"
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 )
 
 func HealthCheck(c *fiber.Ctx) error {
@@ -77,7 +76,7 @@ func UploadFile(c *fiber.Ctx) error {
 	//save the file in a docker based postgres db
 
 	newFile := &models.File{
-		FileId:     uuid.New(),
+		FileId:     fileName,
 		Name:       fileName,
 		Size:       fileSize,
 		Created_At: time.Now(),
