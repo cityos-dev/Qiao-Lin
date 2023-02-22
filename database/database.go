@@ -25,13 +25,6 @@ func ConnectToPostgresDb() {
 		"password=%s dbname=%s sslmode=disable",
 		"postgres", 5432, os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_DATABASE_NAME"))
 
-	// dsn := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
-	// 	os.Getenv("DB_USER"),
-	// 	os.Getenv("DB_PASSWORD"),
-	// 	"postgres",
-	// 	"5432",
-	// 	os.Getenv("DB_NAME"))
-
 	db, err := gorm.Open("postgres", dsn)
 
 	if err != nil {
